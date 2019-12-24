@@ -12,11 +12,11 @@ def clientVersion() {
 preferences {    
 	section("Configuration Parameters"){
 		input "email", "email", title: "Email Address",required: true
-		input "pass","password", title: "Password",required:true
+		input "pass","password", title: "%nPassword",required:true
 		input "internal_ip", "text", title: "Internal IP", required: true
 		input "internal_port", "text", title: "Internal Port (default is 3042)", required: true
 		input title: "", description: "Ryobi GDO200 Device Handler v${clientVersion()}", displayDuringSetup: false, type: "paragraph", element: "paragraph", required: true
-        input title: "", description: "http://www.github.com/Madj42/RyobiGDO", displayDuringSetup: false, type: "paragraph", element: "paragraph"	
+                input title: "", description: "http://www.github.com/Madj42/RyobiGDO", displayDuringSetup: false, type: "paragraph", element: "paragraph"	
 		input "pollInterval", "number", title: "Polling Interval", description: "Change polling frequency (in minutes)", defaultValue:4, range: "1..59", required: true, displayDuringSetup: true
     }
 }
