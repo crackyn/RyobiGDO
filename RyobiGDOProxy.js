@@ -77,13 +77,18 @@ const queryData = url.parse(request.url, true).query;
                                         //console.log(someValue.result[0].varName)
                                                                                 var deviceModel = someValue.result[0].deviceTypeIds
                         //                                                      console.log(deviceModel)
-                                                                                if (deviceModel == 'gda500hub') {
-                                                                                        var doorid = someValue.result[1].varName
+                                                                                if (queryData.doorid == null) {
+                                                                                        if (deviceModel == 'gda500hub') {
+                                                                                                var doorid = someValue.result[1].varName
+                                                                                        }
+                                                                                        else {
+                                                                                                var doorid = someValue.result[0].varName
+                                                                                        }
                                                                                 }
                                                                                 else {
-                                                                                        var doorid = someValue.result[0].varName
-
+                                                                                        var doorid = queryData.doorid
                                                                                 }
+                                                                                        
 
 
         if (cmdtype == 0) {
