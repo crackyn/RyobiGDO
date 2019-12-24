@@ -18,7 +18,7 @@ preferences {
 		input title: "", description: "Ryobi GDO200 Device Handler v${clientVersion()}", displayDuringSetup: false, type: "paragraph", element: "paragraph", required: true
                 input title: "", description: "http://www.github.com/Madj42/RyobiGDO", displayDuringSetup: false, type: "paragraph", element: "paragraph"	
 		input "pollInterval", "number", title: "Polling Interval", description: "Change polling frequency (in minutes)", defaultValue:4, range: "1..59", required: true, displayDuringSetup: true
-		input "thisdoorid", "text", title: "Door ID",required: true
+		input "doorid", "text", title: "Door ID",required: true
     }
 }
 
@@ -139,7 +139,7 @@ def parse(String description){
 def on() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=lighton&doorid=${thisdoorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=lighton&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
@@ -154,7 +154,7 @@ def result = new physicalgraph.device.HubAction(
 def off() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=lightoff&doorid=${thisdoorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=lightoff&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
@@ -169,7 +169,7 @@ def result = new physicalgraph.device.HubAction(
 def open() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=dooropen&doorid=${thisdoorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=dooropen&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
@@ -185,7 +185,7 @@ def result = new physicalgraph.device.HubAction(
 def close() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=doorclose&doorid=${thisdoorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=doorclose&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
@@ -201,7 +201,7 @@ def result = new physicalgraph.device.HubAction(
 def getStatus() {
 	def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=status&doorid=${thisdoorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=status&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				])
