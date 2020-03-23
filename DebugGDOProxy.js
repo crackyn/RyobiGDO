@@ -55,8 +55,8 @@ const queryData = url.parse(request.url, true).query;
 		var cleanpass = queryData.pass.replace(/[<>+\/'"*()?]/g, "\\$&");
         var request = require('request');
                 const getAPIKey = () => new Promise((resolve, reject) => {
-                        console.log(queryData.email)
-                        console.log(queryData.pass)
+//                        console.log(queryData.email)
+//                        console.log(queryData.pass)
                         var options = {url:'https://tti.tiwiconnect.com/api/login',method:'POST',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
                                 request(options, (err, res, body) => {
                                 if (err) return reject(err)
@@ -135,6 +135,7 @@ console.log('--------')
 console.log(batval)
 console.log('--------')
 console.log('--------')
+console.log('Door: ' + statusValue.result[0].metadata.name)
 console.log('Door Val: ' + doorval)
 console.log('Light Val: ' + lightval)
 console.log('Battery Val: ' + batval)
