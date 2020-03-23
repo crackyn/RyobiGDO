@@ -65,8 +65,8 @@ metadata {
 			state "off", label: 'Light Off', action: "switch.on", icon: "st.Lighting.light11", backgroundColor: "#ffffff"
 			state "on", label: 'Light On', action: "switch.off", icon: "st.Lighting.light11", backgroundColor: "#79b821"
 		}
-        standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat") {
-            state "default", action:"refresh", icon:"st.secondary.refresh"
+        valueTile("icon", "device.icon", inactiveLabel: false, decoration: "flat", width: 2, height: 1) {
+            state "default", label: '', icon: "https://logo-png.com/logo/ryobi-logo.png"
         }
         valueTile("battery", "device.Battery", inactiveLabel: false, decoration: "flat", width: 2, height: 1) {
             state "Battery", label: 'Battery: ${currentValue}%'
