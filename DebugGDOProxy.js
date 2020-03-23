@@ -135,6 +135,7 @@ console.log('--------')
 console.log(batval)
 console.log('--------')
 console.log('--------')
+console.log('Door Val: ' + doorval)
 }
 getStatusController()
 
