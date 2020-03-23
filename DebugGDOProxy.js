@@ -118,7 +118,7 @@ const getStatusController = async function() {
     var statusValue = await getStatus()
     console.log('->Got status')
         for(var device in statusValue.result[0].deviceTypeMap) {
-                console.log('-->' + statusValue.result[0].deviceTypeMap[device])
+                console.log('-->' + statusValue.result[0].deviceTypeMap[device].netadata[0].name)
                 if (device.includes('garageDoor')) {
                         var doorval = statusValue.result[0].deviceTypeMap[device].at.doorState.value
                 }
