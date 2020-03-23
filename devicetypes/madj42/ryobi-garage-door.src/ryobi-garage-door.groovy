@@ -7,7 +7,7 @@
 */
 
 def clientVersion() {
-    return "2.6"
+    return "2.7"
 }
 
 preferences {
