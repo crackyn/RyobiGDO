@@ -61,7 +61,7 @@ metadata {
 			attributeState "opening", label:'Door Opening', action:"door control.open", icon:"st.Home.home2", backgroundColor:"#79b821"
             }
         }
-        standardTile("button2", "device.switch", width: 1, height: 1, canChangeIcon: false) {
+        standardTile("button2", "device.switch", width: 2, height: 2, canChangeIcon: false) {
 			state "off", label: 'Light Off', action: "switch.on", icon: "st.Lighting.light11", backgroundColor: "#ffffff"
 			state "on", label: 'Light On', action: "switch.off", icon: "st.Lighting.light11", backgroundColor: "#79b821"
 		}
