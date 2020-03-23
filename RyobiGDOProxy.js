@@ -1,5 +1,5 @@
 // Project Name: Ryobi GDO Proxy for Node.js
-// Version: 2.5
+// Version: 2.0
 // Author: Justin Dybedahl
 //
 // https://github.com/Madj42/RyobiGDO/
@@ -18,22 +18,22 @@ const queryData = url.parse(request.url, true).query;
 //        if (reqip[3] !== 'x.x.x.x') {
 //        response.end('Not Authorized')
 //        }
-//console.log(request.url)
+////console.log(request.url)
         if (queryData.name == 'lighton') {
                 var cmd = 'lightState'
-//                var cmdstate = 'true'
+                var cmdstate = 'true'
                 var cmdtype = 0
         } else if (queryData.name == 'lightoff') {
                 var cmd = 'lightState'
-//                var cmdstate = 'false'
+                var cmdstate = 'false'
                 var cmdtype = 0
         } else if (queryData.name == 'dooropen') {
                 var cmd = 'doorCommand'
-//                var cmdstate = '1'
+                var cmdstate = '1'
                 var cmdtype = 0
         } else if (queryData.name == 'doorclose') {
                 var cmd = 'doorCommand'
-//                var cmdstate = '0'
+                var cmdstate = '0'
                 var cmdtype = 0
         } else if (queryData.name == 'status') {
                 var cmd = 'status'
@@ -48,12 +48,15 @@ const queryData = url.parse(request.url, true).query;
                 response.end('No email specified');
         } else if (queryData.pass == null) {
                 response.end('No password specified');
+        } else if (queryData.doorid == null) {
+                response.end('No door id specified');
         }
-//              var cleanpass = queryData.pass.replace(/[<>+\/'"*()?]/g, "\\$&");
         var doorid = queryData.doorid;
-        var cleanpass = queryData.pass
+		var cleanpass = queryData.pass.replace(/[<>+\/'"*()?]/g, "\\$&");
         var request = require('request');
                 const getAPIKey = () => new Promise((resolve, reject) => {
+//                        //console.log(queryData.email)
+//                        //console.log(queryData.pass)
                         var options = {url:'https://tti.tiwiconnect.com/api/login',method:'POST',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
                                 request(options, (err, res, body) => {
                                 if (err) return reject(err)
@@ -66,7 +69,7 @@ const queryData = url.parse(request.url, true).query;
                                 var apikey = someValue.result.auth.apiKey
 
                             const getDoorID = () => new Promise((resolve, reject) => {
-                                        var options = {url:'https://tti.tiwiconnect.com/api/devices'' + doorid + '',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
+                                        var options = {url:'https://tti.tiwiconnect.com/api/devices/' + doorid + '',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
                                                 request(options, (err, res, body) => {
                                                 if (err) return reject(err)
                                                 resolve(body)
@@ -75,41 +78,10 @@ const queryData = url.parse(request.url, true).query;
 
                                 const getDoorIDController = async function() {
                                         var someValue = await getDoorID()
-                                        //console.log(someValue.result[0].varName)
-                                                                                var deviceModel = someValue.result[0].deviceTypeIds
-                        //                                                      console.log(deviceModel)
-                                                                                if (queryData.doorid == null) {
-                                                                                        if (deviceModel == 'gda500hub') {
-                                                                                                var doorid = someValue.result[1].varName
-                                                                                        }
-                                                                                        else {
-                                                                                                var doorid = someValue.result[0].varName
-                                                                                        }
-                                                                                }
-                                                                                else {
-                                                                                        var doorid = queryData.doorid
-                                                                                }
-
-
+                                        ////console.log(someValue.result[0].varName)
+                                        var doorid = someValue.result[0].varName
 
         if (cmdtype == 0) {
-                if (queryData.name == 'lightoff' && deviceModel == 'gda500hub') {
-                var cmdstate = 'true'
-                }
-                else if (queryData.name == 'lightoff' && deviceModel == 'gdoMasterUnit') {
-                var cmdstate = 'false'
-//              console.log('Running Correctly')
-                }
-                else if (queryData.name == 'lighton') {
-                var cmdstate = 'true'
-                }
-                else if (queryData.name == 'dooropen') {
-                var cmdstate = '1'
-                }
-                else if (queryData.name == 'doorclose') {
-                var cmdstate = '0'
-                }
-//      console.log(cmdstate)
         var ws = new WebSocket('wss://tti.tiwiconnect.com/api/wsrpc', 'echo-protocol');
         ws.onopen = function()
         {
@@ -152,17 +124,27 @@ const getStatusController = async function() {
                 else if (device.includes('backupCharger')) {
                         var batval = statusValue.result[0].deviceTypeMap[device].at.chargeLevel.value
                 }
-                                else if (device.includes('garageDoorSensor')) {
-                                        var doorval = statusValue.result[0].deviceTypeMap[device].at.doorState.value
-                                        var batval = statusValue.result[0].deviceTypeMap[device].at.batteryLevel.value
-                                        var lightval = 'false'
-                                }
         if (batval == null) {
                 var batval = 'NA'
         }
 }
-
-response.end('status:' + String(lightval) + ':' + String(doorval) + ':' + String(batval))
+//console.log('--------')
+//console.log('TYPE MAP')
+//console.log('--------')
+//console.log(statusValue.result[0].deviceTypeMap)
+//console.log('--------')
+//console.log('METADATA')
+//console.log('--------')
+//console.log(statusValue.result[0].varName)
+//console.log('--------')
+//console.log('--------')
+////console.log('Door: ' + statusValue.result[0].metadata.name)
+//console.log('Door ID: ' + statusValue.result[0].varName)
+//console.log('Door Val: ' + doorval)
+//console.log('Light Val: ' + lightval)
+//console.log('Battery Val: ' + batval)
+//console.log('--------')
+//console.log('--------')
 }
 getStatusController()
 
@@ -179,9 +161,9 @@ const server = http.createServer(requestHandler)
 
 server.listen(port, (err) => {
   if (err) {
-    return console.log('something bad happened', err)
+    return //console.log('something bad happened', err)
   }
 
-  console.log(`server is listening on ${port}`)
+  //console.log(`server is listening on ${port}`)
 }
 )
