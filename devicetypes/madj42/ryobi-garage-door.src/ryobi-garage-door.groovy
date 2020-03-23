@@ -65,11 +65,14 @@ metadata {
 			state "off", label: 'Light Off', action: "switch.on", icon: "st.Lighting.light11", backgroundColor: "#ffffff"
 			state "on", label: 'Light On', action: "switch.off", icon: "st.Lighting.light11", backgroundColor: "#79b821"
 		}
-         standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat") {
+        standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat") {
             state "default", action:"refresh", icon:"st.secondary.refresh"
         }
         valueTile("battery", "device.Battery", inactiveLabel: false, decoration: "flat", width: 2, height: 1) {
             state "Battery", label: 'Battery: ${currentValue}%'
+        }
+        standardTile("refresh", "device.switch", inactiveLabel: false, decoration: "flat") {
+            state "default", action:"refresh", icon:"st.secondary.refresh"
         }
         valueTile("icon", "device.icon", inactiveLabel: false, decoration: "flat", width: 2, height: 1) {
             state "default", label: '', icon: "https://logo-png.com/logo/ryobi-logo.png"
@@ -99,7 +102,7 @@ def updated() {
 }
 
 def parse(String description){
-//log.debug "Parse called"
+log.debug "Parse called"
 	def msg = parseLanMessage(description)
     if (msg.body.startsWith("status:")) {
     	def batstatus = msg.body.split(':')[3]
@@ -115,23 +118,23 @@ def parse(String description){
 	sendEvent(name: "Battery", value: batstatus)
 	}
     	if (lightstatus == "false") {
-        //log.debug "Light OFF"
+        log.debug "Light OFF"
         sendEvent(name: "switch", value: "off")
    		} else if (lightstatus == "true") {
-        //log.debug "Light ON"
+        log.debug "Light ON"
         sendEvent(name: "switch", value: "on")
         }
        	if (doorstatus == "0") {
-        //log.debug "Door Closed"
+        log.debug "Door Closed"
         sendEvent(name: "door", value: "closed")
    		} else if (doorstatus == "1") {
-        //log.debug "Door Open"
+        log.debug "Door Open"
         sendEvent(name: "door", value: "open")
         } else if (doorstatus == "2") {
-        //log.debug "Door Closing"
+        log.debug "Door Closing"
         sendEvent(name: "door", value: "closing")
         } else if (doorstatus == "3") {
-        //log.debug "Door Opening"
+        log.debug "Door Opening"
         sendEvent(name: "door", value: "opening")
         }
     }
@@ -212,14 +215,14 @@ def getStatus() {
 
 private String convertIPtoHex(ipAddress) {
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
-    //log.debug "IP address entered is $ipAddress and the converted hex code is $hex"
+    log.debug "IP address entered is $ipAddress and the converted hex code is $hex"
     return hex
 
 }
 
 private String convertPortToHex(port) {
     String hexport = port.toString().format( '%04x', port.toInteger() )
-    //log.debug hexport
+    log.debug hexport
     return hexport
 }
 
