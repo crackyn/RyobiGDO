@@ -104,7 +104,7 @@ var options = {url:'https://tti.tiwiconnect.com/api/devices/' + doorid + '',meth
             const stop = new Date().getTime() + time;
          while(new Date().getTime() < stop);
         }
-        freeze(3000);
+        //freeze(3000);
 
         request(options, (err, res, body) => {
         if (err) return reject(err)
