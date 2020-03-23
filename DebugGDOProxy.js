@@ -66,7 +66,7 @@ const queryData = url.parse(request.url, true).query;
                                 var apikey = someValue.result.auth.apiKey
 
                             const getDoorID = () => new Promise((resolve, reject) => {
-                                        var options = {url:'https://tti.tiwiconnect.com/api/devices',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
+                                        var options = {url:'https://tti.tiwiconnect.com/api/devices' + doorid + '',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
                                                 request(options, (err, res, body) => {
                                                 if (err) return reject(err)
                                                 resolve(body)
