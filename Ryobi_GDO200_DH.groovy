@@ -1,8 +1,9 @@
 /*
 * Author: Justin Dybedahl
 * Ryobi GDO200/GDO201/GDO500 Device Handler
-* v2.6
+* v2.7
 * Thanks to @Projectskydroid for the modifications.
+* 2020-03-23 updated by crackyn to handle multiple GDO
 */
 
 def clientVersion() {
