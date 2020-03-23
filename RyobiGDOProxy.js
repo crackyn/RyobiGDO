@@ -50,6 +50,7 @@ const queryData = url.parse(request.url, true).query;
                 response.end('No password specified');
         }
 //              var cleanpass = queryData.pass.replace(/[<>+\/'"*()?]/g, "\\$&");
+        var doorid = queryData.doorid;
         var cleanpass = queryData.pass
         var request = require('request');
                 const getAPIKey = () => new Promise((resolve, reject) => {

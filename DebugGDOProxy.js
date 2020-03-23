@@ -51,6 +51,7 @@ const queryData = url.parse(request.url, true).query;
         } else if (queryData.doorid == null) {
                 response.end('No door id specified');
         }
+        var doorid = queryData.doorid;
 		var cleanpass = queryData.pass.replace(/[<>+\/'"*()?]/g, "\\$&");
         var request = require('request');
                 const getAPIKey = () => new Promise((resolve, reject) => {
@@ -68,7 +69,7 @@ const queryData = url.parse(request.url, true).query;
                                 var apikey = someValue.result.auth.apiKey
 
                             const getDoorID = () => new Promise((resolve, reject) => {
-                                        var options = {url:'https://tti.tiwiconnect.com/api/devices' + doorid + '',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
+                                        var options = {url:'https://tti.tiwiconnect.com/api/devices/' + doorid + '',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
                                                 request(options, (err, res, body) => {
                                                 if (err) return reject(err)
                                                 resolve(body)
