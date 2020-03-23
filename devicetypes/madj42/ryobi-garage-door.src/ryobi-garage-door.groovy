@@ -1,24 +1,25 @@
 /*
 * Author: Justin Dybedahl
 * Ryobi GDO200/GDO201/GDO500 Device Handler
-* v2.6
+* v2.7
 * Thanks to @Projectskydroid for the modifications.
+* 2020-03-23 updated by crackyn to handle multiple GDO
 */
 
 def clientVersion() {
     return "2.6"
 }
 
-preferences {    
+preferences {
 	section("Configuration Parameters"){
 		input "email", "email", title: "Email Address",required: true
 		input "pass","password", title: "Password",required:true
 		input "internal_ip", "text", title: "Internal IP", required: true
 		input "internal_port", "text", title: "Internal Port (default is 3042)", required: true
 		input title: "", description: "Ryobi GDO200 Device Handler v${clientVersion()}", displayDuringSetup: false, type: "paragraph", element: "paragraph", required: true
-                input title: "", description: "http://www.github.com/Madj42/RyobiGDO", displayDuringSetup: false, type: "paragraph", element: "paragraph"	
+                input title: "", description: "http://www.github.com/Madj42/RyobiGDO", displayDuringSetup: false, type: "paragraph", element: "paragraph"
 		input "pollInterval", "number", title: "Polling Interval", description: "Change polling frequency (in minutes)", defaultValue:4, range: "1..59", required: true, displayDuringSetup: true
-		input "doorid", "text", title: "Door ID",required: true
+		input "door_id", "text", title: "Door ID",required: true
     }
 }
 
@@ -77,7 +78,7 @@ metadata {
 			state "default", label:'open', action:"door control.open", icon:"st.Home.home2"
         }
 		standardTile("close", "device.door", inactiveLabel: false, decoration: "flat") {
-			state "default", label:'close', action:"door control.close", icon:"st.Home.home2"  
+			state "default", label:'close', action:"door control.close", icon:"st.Home.home2"
         }
 		main "door"
 			details (["door","button","button2","refresh","battery","icon","open","close"])
@@ -139,77 +140,77 @@ def parse(String description){
 def on() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=lighton&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=lighton&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
 				)
-     
+
 			sendHubCommand(result)
 			sendEvent(name: "switch", value: "on")
             runIn(5,getStatus)
-			log.debug "Turning light ON" 
+			log.debug "Turning light ON"
             }
 
 def off() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=lightoff&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=lightoff&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
 				)
-                
+
 			sendHubCommand(result)
 			sendEvent(name: "switch", value: "off")
            runIn(5,getStatus)
 			log.debug "Turning light OFF"
 	}
-    
+
 def open() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=dooropen&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=dooropen&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
 				)
-            
+
 			sendHubCommand(result)
 			sendEvent(name: "door", value: "opening")
             runIn(5,getStatus)
             runIn(17,getStatus)
-			log.debug "OPENING Garage Door" 
+			log.debug "OPENING Garage Door"
             }
-            
+
 def close() {
 def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=doorclose&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=doorclose&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				]
 				)
-           
+
 			sendHubCommand(result)
 			sendEvent(name: "door", value: "closing")
             runIn(5,getStatus)
             runIn(21,getStatus)
-			log.debug "CLOSING Garage Door" 
+			log.debug "CLOSING Garage Door"
             }
- 
+
 def getStatus() {
 	def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=status&doorid=${doorid}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=status&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
 				])
 			sendHubCommand(result)
 			log.debug "Getting Status"
 	}
-    
-private String convertIPtoHex(ipAddress) { 
+
+private String convertIPtoHex(ipAddress) {
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
     //log.debug "IP address entered is $ipAddress and the converted hex code is $hex"
     return hex
