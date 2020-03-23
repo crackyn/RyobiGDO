@@ -102,7 +102,7 @@ def updated() {
 }
 
 def parse(String description){
-log.debug "Parse called"
+//log.debug "Parse called"
 	def msg = parseLanMessage(description)
     if (msg.body.startsWith("status:")) {
     	def batstatus = msg.body.split(':')[3]
@@ -118,23 +118,23 @@ log.debug "Parse called"
 	sendEvent(name: "Battery", value: batstatus)
 	}
     	if (lightstatus == "false") {
-        log.debug "Light OFF"
+        //log.debug "Light OFF"
         sendEvent(name: "switch", value: "off")
    		} else if (lightstatus == "true") {
-        log.debug "Light ON"
+        //log.debug "Light ON"
         sendEvent(name: "switch", value: "on")
         }
        	if (doorstatus == "0") {
-        log.debug "Door Closed"
+        //log.debug "Door Closed"
         sendEvent(name: "door", value: "closed")
    		} else if (doorstatus == "1") {
-        log.debug "Door Open"
+        //log.debug "Door Open"
         sendEvent(name: "door", value: "open")
         } else if (doorstatus == "2") {
-        log.debug "Door Closing"
+        //log.debug "Door Closing"
         sendEvent(name: "door", value: "closing")
         } else if (doorstatus == "3") {
-        log.debug "Door Opening"
+        //log.debug "Door Opening"
         sendEvent(name: "door", value: "opening")
         }
     }
@@ -152,7 +152,7 @@ def result = new physicalgraph.device.HubAction(
 			sendHubCommand(result)
 			sendEvent(name: "switch", value: "on")
             runIn(5,getStatus)
-			log.debug "Turning light ON"
+			//log.debug "Turning light ON"
             }
 
 def off() {
@@ -167,7 +167,7 @@ def result = new physicalgraph.device.HubAction(
 			sendHubCommand(result)
 			sendEvent(name: "switch", value: "off")
            runIn(5,getStatus)
-			log.debug "Turning light OFF"
+			//log.debug "Turning light OFF"
 	}
 
 def open() {
@@ -183,7 +183,7 @@ def result = new physicalgraph.device.HubAction(
 			sendEvent(name: "door", value: "opening")
             runIn(5,getStatus)
             runIn(17,getStatus)
-			log.debug "OPENING Garage Door"
+			//log.debug "OPENING Garage Door"
             }
 
 def close() {
@@ -199,7 +199,7 @@ def result = new physicalgraph.device.HubAction(
 			sendEvent(name: "door", value: "closing")
             runIn(5,getStatus)
             runIn(21,getStatus)
-			log.debug "CLOSING Garage Door"
+			//log.debug "CLOSING Garage Door"
             }
 
 def getStatus() {
@@ -210,24 +210,24 @@ def getStatus() {
 				HOST: "${internal_ip}:${internal_port}"
 				])
 			sendHubCommand(result)
-			log.debug "Getting Status"
+			//log.debug "Getting Status"
 	}
 
 private String convertIPtoHex(ipAddress) {
     String hex = ipAddress.tokenize( '.' ).collect {  String.format( '%02x', it.toInteger() ) }.join()
-    log.debug "IP address entered is $ipAddress and the converted hex code is $hex"
+    //log.debug "IP address entered is $ipAddress and the converted hex code is $hex"
     return hex
 
 }
 
 private String convertPortToHex(port) {
     String hexport = port.toString().format( '%04x', port.toInteger() )
-    log.debug hexport
+    //log.debug hexport
     return hexport
 }
 
 def updateDeviceNetworkID() {
-	log.debug "Executing 'updateDeviceNetworkID'"
+	//log.debug "Executing 'updateDeviceNetworkID'"
     def iphex = convertIPtoHex(internal_ip).toUpperCase()
     def porthex = convertPortToHex(internal_port).toUpperCase()
 	device.setDeviceNetworkId(iphex + ":" + porthex)
