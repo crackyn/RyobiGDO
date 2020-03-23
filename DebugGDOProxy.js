@@ -129,12 +129,13 @@ const getStatusController = async function() {
         }
 }
 console.log('--------')
+console.log('TYPE MAP')
 console.log('--------')
 console.log(statusValue.result[0].deviceTypeMap)
 console.log('--------')
-console.log(statusValue.result[0].metadata)
+console.log('METADATA')
 console.log('--------')
-console.log(batval)
+console.log(statusValue.result[0].metadata)
 console.log('--------')
 console.log('--------')
 //console.log('Door: ' + statusValue.result[0].metadata.name)
