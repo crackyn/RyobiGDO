@@ -136,6 +136,10 @@ console.log(batval)
 console.log('--------')
 console.log('--------')
 console.log('Door Val: ' + doorval)
+console.log('Light Val: ' + lightval)
+console.log('Battery Val: ' + batval)
+console.log('--------')
+console.log('--------')
 }
 getStatusController()
 
