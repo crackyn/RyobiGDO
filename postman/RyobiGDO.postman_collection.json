@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "2d9bfb6e-e44e-4ff7-b56d-15a4f80b908e",
+		"name": "Ryobi GDO",
+		"description": "Make sure you set current value in the Environment variables in environment \"RyobiGDO\".  The door_id will be the value of \"varName\" for each GDO.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getDevices",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "64e63950-a8e5-460f-a21f-c2553a43d3f2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\" : \"{{username}}\",\n\t\"password\" : \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://tti.tiwiconnect.com/api/devices",
+					"protocol": "https",
+					"host": [
+						"tti",
+						"tiwiconnect",
+						"com"
+					],
+					"path": [
+						"api",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "9427e686-6aed-45cc-9aeb-332c1e437330",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "92f76765-b476-44a7-8071-17f902151375",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
