@@ -99,12 +99,13 @@ const queryData = url.parse(request.url, true).query;
         var request = require('request');
 
 const getStatus = () => new Promise((resolve, reject) => {
-var options = {url:'https://tti.tiwiconnect.com/api/devices/' + doorid + '',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
-    function freeze(time) {
+    console.log('-->Getting Status')
+    var options = {url:'https://tti.tiwiconnect.com/api/devices/' + doorid + '',method:'GET',json:JSON.parse('{"username":"' + queryData.email + '","password":"' + cleanpass + '"}')}
+        function freeze(time) {
             const stop = new Date().getTime() + time;
-         while(new Date().getTime() < stop);
+            while(new Date().getTime() < stop);
         }
-        //freeze(3000);
+        freeze(3000);
 
         request(options, (err, res, body) => {
         if (err) return reject(err)
@@ -113,8 +114,11 @@ var options = {url:'https://tti.tiwiconnect.com/api/devices/' + doorid + '',meth
 })
 
 const getStatusController = async function() {
+    console.log('->Asking for status')
     var statusValue = await getStatus()
+    console.log('->Got status')
         for(var device in statusValue.result[0].deviceTypeMap) {
+                console.log('-->' + statusValue.result[0].deviceTypeMap[device].name)
                 if (device.includes('garageDoor')) {
                         var doorval = statusValue.result[0].deviceTypeMap[device].at.doorState.value
                 }
