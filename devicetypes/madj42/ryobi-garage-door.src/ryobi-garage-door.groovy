@@ -23,6 +23,9 @@ preferences {
     }
 }
 
+
+
+
 metadata {
 	definition (name: "Ryobi Garage Door", namespace: "madj42", author: "Justin Dybedahl") {
 		capability "Actuator"
@@ -94,129 +97,112 @@ poll()
 }
 
 def updated() {
-    	runIn(3, "updateDeviceNetworkID_" + door_id)
+    	runIn(3, "updateDeviceNetworkID")
 		schedule("0 0/${settings.pollInterval} * * * ?", poll)
 }
 
 def parse(String description){
 //log.debug "Parse called"
 	def msg = parseLanMessage(description)
-	if (msg.body.startsWith("apikey:")) {
-		def apikey = msg.body.split(':')[1]
-	} else if (msg.body.startsWith("status:")) {
-			def batstatus = msg.body.split(':')[3]
-			def doorstatus = msg.body.split(':')[2]
-			def lightstatus = msg.body.split(':')[1]
-		if (batstatus == "255") {
-			sendEvent(name: "Battery", value: 0)
-		} else if (batstatus == null) {
-			sendEvent(name: "Battery", value: 0)
-		} else if (batstatus == 'NA') {
-			sendEvent(name: "Battery", value: 0)
-		} else {
-		sendEvent(name: "Battery", value: batstatus)
-		}
-			if (lightstatus == "false") {
-			//log.debug "Light OFF"
-			sendEvent(name: "switch", value: "off")
-			} else if (lightstatus == "true") {
-			//log.debug "Light ON"
-			sendEvent(name: "switch", value: "on")
-			}
-			if (doorstatus == "0") {
-			//log.debug "Door Closed"
-			sendEvent(name: "door", value: "closed")
-			} else if (doorstatus == "1") {
-			//log.debug "Door Open"
-			sendEvent(name: "door", value: "open")
-			} else if (doorstatus == "2") {
-			//log.debug "Door Closing"
-			sendEvent(name: "door", value: "closing")
-			} else if (doorstatus == "3") {
-			//log.debug "Door Opening"
-			sendEvent(name: "door", value: "opening")
-			}
+    if (msg.body.startsWith("status:")) {
+    	def batstatus = msg.body.split(':')[3]
+    	def doorstatus = msg.body.split(':')[2]
+    	def lightstatus = msg.body.split(':')[1]
+	if (batstatus == "255") {
+		sendEvent(name: "Battery", value: 0)
+	} else if (batstatus == null) {
+		sendEvent(name: "Battery", value: 0)
+	} else if (batstatus == 'NA') {
+		sendEvent(name: "Battery", value: 0)
+	} else {
+	sendEvent(name: "Battery", value: batstatus)
+	}
+    	if (lightstatus == "false") {
+        //log.debug "Light OFF"
+        sendEvent(name: "switch", value: "off")
+   		} else if (lightstatus == "true") {
+        //log.debug "Light ON"
+        sendEvent(name: "switch", value: "on")
+        }
+       	if (doorstatus == "0") {
+        //log.debug "Door Closed"
+        sendEvent(name: "door", value: "closed")
+   		} else if (doorstatus == "1") {
+        //log.debug "Door Open"
+        sendEvent(name: "door", value: "open")
+        } else if (doorstatus == "2") {
+        //log.debug "Door Closing"
+        sendEvent(name: "door", value: "closing")
+        } else if (doorstatus == "3") {
+        //log.debug "Door Opening"
+        sendEvent(name: "door", value: "opening")
+        }
     }
 }
 
 def on() {
-	getAPIKey()
-	def result = new physicalgraph.device.HubAction(
-					method: "GET",
-					path: "/?name=lighton&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
-					headers: [
-					HOST: "${internal_ip}:${internal_port}"
-					]
-					)
-
-				sendHubCommand(result)
-				sendEvent(name: "switch", value: "on")
-				runIn(5,getStatus)
-				//log.debug "Turning light ON"
-				}
-
-def off() {
-	getAPIKey()
-	def result = new physicalgraph.device.HubAction(
-					method: "GET",
-					path: "/?name=lightoff&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
-					headers: [
-					HOST: "${internal_ip}:${internal_port}"
-					]
-					)
-
-				sendHubCommand(result)
-				sendEvent(name: "switch", value: "off")
-			runIn(5,getStatus)
-				//log.debug "Turning light OFF"
-		}
-
-def open() {
-	getAPIKey()
-	def result = new physicalgraph.device.HubAction(
-					method: "GET",
-					path: "/?name=dooropen&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
-					headers: [
-					HOST: "${internal_ip}:${internal_port}"
-					]
-					)
-
-				sendHubCommand(result)
-				sendEvent(name: "door", value: "opening")
-				runIn(5,getStatus)
-				runIn(17,getStatus)
-				//log.debug "OPENING Garage Door"
-				}
-
-def close() {
-	getAPIKey()
-	def result = new physicalgraph.device.HubAction(
-					method: "GET",
-					path: "/?name=doorclose&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
-					headers: [
-					HOST: "${internal_ip}:${internal_port}"
-					]
-					)
-
-				sendHubCommand(result)
-				sendEvent(name: "door", value: "closing")
-				runIn(5,getStatus)
-				runIn(21,getStatus)
-				//log.debug "CLOSING Garage Door"
-				}
-
-def getAPIKey() {
-	def result = new physicalgraph.device.HubAction(
+def result = new physicalgraph.device.HubAction(
 				method: "GET",
-				path: "/?name=status&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
+				path: "/?name=lighton&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
 				headers: [
 				HOST: "${internal_ip}:${internal_port}"
-				])
+				]
+				)
+
 			sendHubCommand(result)
-}
+			sendEvent(name: "switch", value: "on")
+            runIn(5,getStatus)
+			//log.debug "Turning light ON"
+            }
+
+def off() {
+def result = new physicalgraph.device.HubAction(
+				method: "GET",
+				path: "/?name=lightoff&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
+				headers: [
+				HOST: "${internal_ip}:${internal_port}"
+				]
+				)
+
+			sendHubCommand(result)
+			sendEvent(name: "switch", value: "off")
+           runIn(5,getStatus)
+			//log.debug "Turning light OFF"
+	}
+
+def open() {
+def result = new physicalgraph.device.HubAction(
+				method: "GET",
+				path: "/?name=dooropen&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
+				headers: [
+				HOST: "${internal_ip}:${internal_port}"
+				]
+				)
+
+			sendHubCommand(result)
+			sendEvent(name: "door", value: "opening")
+            runIn(5,getStatus)
+            runIn(17,getStatus)
+			//log.debug "OPENING Garage Door"
+            }
+
+def close() {
+def result = new physicalgraph.device.HubAction(
+				method: "GET",
+				path: "/?name=doorclose&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
+				headers: [
+				HOST: "${internal_ip}:${internal_port}"
+				]
+				)
+
+			sendHubCommand(result)
+			sendEvent(name: "door", value: "closing")
+            runIn(5,getStatus)
+            runIn(21,getStatus)
+			//log.debug "CLOSING Garage Door"
+            }
 
 def getStatus() {
-	getAPIKey()
 	def result = new physicalgraph.device.HubAction(
 				method: "GET",
 				path: "/?name=status&doorid=${door_id}&apikey=${apikey}&email=${email}&pass=${pass}",
@@ -244,5 +230,5 @@ def updateDeviceNetworkID() {
 	//log.debug "Executing 'updateDeviceNetworkID'"
     def iphex = convertIPtoHex(internal_ip).toUpperCase()
     def porthex = convertPortToHex(internal_port).toUpperCase()
-	device.setDeviceNetworkId(iphex + ":" + porthex + ":" + door_id)
+	device.setDeviceNetworkId(iphex + ":" + porthex)
 }
