@@ -230,5 +230,5 @@ def updateDeviceNetworkID() {
 	//log.debug "Executing 'updateDeviceNetworkID'"
     def iphex = convertIPtoHex(internal_ip).toUpperCase()
     def porthex = convertPortToHex(internal_port).toUpperCase()
-	device.setDeviceNetworkId(iphex + ":" + porthex)
+	device.setDeviceNetworkId(iphex + ":" + porthex + ":" door_id)
 }
