@@ -94,7 +94,7 @@ poll()
 }
 
 def updated() {
-    	runIn(3, "updateDeviceNetworkID")
+    	runIn(3, "updateDeviceNetworkID_" + door_id)
 		schedule("0 0/${settings.pollInterval} * * * ?", poll)
 }
 
