@@ -202,6 +202,10 @@ def result = new physicalgraph.device.HubAction(
 			//log.debug "CLOSING Garage Door"
             }
 
+def getAPIKey() {
+	method 
+}
+
 def getStatus() {
 	def result = new physicalgraph.device.HubAction(
 				method: "GET",

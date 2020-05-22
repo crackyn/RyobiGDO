@@ -38,7 +38,7 @@ const queryData = url.parse(request.url, true).query;
     } else if (queryData.name == 'status') {
         var cmd = 'status'
         var cmdtype = 1
-      else if (queryData.name == 'apikey') {
+    } else if (queryData.name == 'apikey') {
         var cmd = 'loginCommand'
         var cmdtype = 2
     } else {
